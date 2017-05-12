@@ -4,6 +4,11 @@ import {observer} from 'mobx-react'
 import BooksForm from './BooksForm'
 
 const  Product = observer((props) => {
+
+  function e(){
+
+  }
+
   var books = props.bookStore.getAllBooks()
   if(books == null ) books = []
   const BooksMapped = books.map((book) => {

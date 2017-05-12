@@ -32,8 +32,9 @@ app.post("/api/books", function(req,res){
     })
 
 app.put("/api/books", function(req,res){
-        var book = req.body
+        var book = req.body.book
         facade.updateBook(book, function(updatedBook){
+            console.log(updatedBook)
             res.send(JSON.stringify(updatedBook))
         }) 
     })

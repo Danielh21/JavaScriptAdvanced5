@@ -16,8 +16,17 @@ class BookStore {
     return this._books
   }
 
-  getSingleBook = action((index) =>{
-    return this._books[index]
+  getSingleBook = action((id) =>{
+    if(this._books == null){
+      return null
+    } 
+    var returnBook;
+    this._books.forEach((book,index) =>{
+      if(book.id == id){
+        returnBook = this._books[index]
+      } 
+    })
+    return returnBook;
   })
 
   changeBooks = action((books) =>{
@@ -35,6 +44,19 @@ class BookStore {
         console.log(error)
       })
     
+  })
+
+  editBook = action((book) => {
+
+    if(book.id == null) throw Error("no Id!")
+    axios.put(`${baseFetchUrl}/api/books`,{book})
+    .then((response) =>{
+      console.log(response)
+      this.fetchBooks()
+    })
+    .catch((error) =>{
+      console.log(error)
+    })
   })
 
   deleteBook = action((bookId) =>{

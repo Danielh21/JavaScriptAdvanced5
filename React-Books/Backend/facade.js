@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient
 var assert = require('assert')
 var url = 'mongodb://127.0.0.1/booksdb'
+var autoIncrement = require("mongodb-autoincrement");
 
 
 function getBooks(callback){
@@ -22,18 +23,18 @@ function addBook(book, callback){
     MongoClient.connect(url, function(err,db){
         assert.equal(null,err)
         assert.ok(db != null)
-
-        db.collection("books").count({}, function(err,number){
-            assert.equal(null,err)
-            book.id = number +1
-            db.collection("books").insertOne(book, function(err,resualt){
-                assert.equal(null,err)
-                var insertedBook = resualt.ops[0]
-                callback(insertedBook)
+        autoIncrement.getNextSequence(db, "books", function (err, autoIndex) {
+                var collection = db.collection("books")
+                book.id = autoIndex
+                collection.insertOne({id: book.id, title: book.title, info: book.info, moreInfo: book.moreInfo}, function(err,data){
+                    assert.equal(null,err)
+                    var result = data
+                    callback(result)
                 })
+            })
 
         })
-    })
+    
 }
 
 function deleteBook(bookId, callback){
@@ -53,13 +54,18 @@ function updateBook(book,callback){
     MongoClient.connect(url,function(err,db){
         assert.equal(null,err)
         assert.ok(db != null)
+        var options = {
+            returnOriginal : false,
+            upsert: true
+        }
 
-        db.collection("books").updateOne({id: book.id},
-                    {$set: {"title": book.title, "info": book.info, "moreinfo": book.moreinfo}},
+        db.collection("books").findOneAndReplace({id: book.id},
+                    {$set: {"id": book.id, "title": book.title, "info": book.info, "moreInfo": book.moreInfo}},
+                    options,
                             function(err,data){
                             assert.equal(null,err)
-                            var updatedBook = data
-                            callback(updateBook)
+                            var updatedBook = data.value
+                            callback(updatedBook)
                             })
     })
 }
