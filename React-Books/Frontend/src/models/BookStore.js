@@ -5,9 +5,11 @@ var baseFetchUrl = "http://localhost:3050"
 useStrict(true)
 class BookStore {
 
-  @observable _books = [];
 
   constructor() {
+    extendObservable(this,{
+      _books :[]
+    })
    this._books = this.fetchBooks()
   }
 
@@ -31,6 +33,7 @@ class BookStore {
 
   changeBooks = action((books) =>{
     this._books = books
+    // Not good but doesnt work else.
   })
 
   addBook = action((book) =>{
@@ -46,7 +49,7 @@ class BookStore {
     
   })
 
-  editBook = action((book) => {
+  editBook = (book) => {
 
     if(book.id == null) throw Error("no Id!")
     axios.put(`${baseFetchUrl}/api/books`,{book})
@@ -57,7 +60,7 @@ class BookStore {
     .catch((error) =>{
       console.log(error)
     })
-  })
+  }
 
   deleteBook = action((bookId) =>{
     axios.delete(`${baseFetchUrl}/api/books/${bookId}`)
@@ -79,7 +82,6 @@ class BookStore {
       console.log(err)
     })
   }
-
 }
 
 

@@ -4,6 +4,10 @@ var url = 'mongodb://127.0.0.1/booksdb'
 var autoIncrement = require("mongodb-autoincrement");
 
 
+function setURL(newURL){
+    url = newURL
+}
+
 function getBooks(callback){
     MongoClient.connect(url, function(err,db){
         assert.equal(null,err)
@@ -28,7 +32,7 @@ function addBook(book, callback){
                 book.id = autoIndex
                 collection.insertOne({id: book.id, title: book.title, info: book.info, moreInfo: book.moreInfo}, function(err,data){
                     assert.equal(null,err)
-                    var result = data
+                    var result = data.ops[0]
                     callback(result)
                 })
             })
@@ -74,7 +78,8 @@ var facade = {
     getBooks: getBooks,
     addBook : addBook,
     deleteBook : deleteBook,
-    updateBook : updateBook
+    updateBook : updateBook,
+    setURL : setURL
 }
 
 module.exports = facade

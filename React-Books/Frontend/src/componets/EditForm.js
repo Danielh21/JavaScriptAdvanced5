@@ -1,31 +1,32 @@
-import {Component} from 'react'
+import React from 'react'
+import './../models/BookStore'
+import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 
-@observer
-class EditForm extends Component {
-    constructor(props){
-        super(props)
-    }
 
-    handleSubmit = (evt) =>{
+
+const EditForm = observer(({bookStore, book}) => {
+
+   function handleSubmit(evt){
         evt.preventDefault()
         const target = evt.target
-        var book = {}
-        book.id = this.props.book.id
-        book.title = target.title.value
-        book.info = target.info.value
-        book.moreInfo = target.moreInfo.value
-        this.props.bookStore.editBook(book)
+        var editedBook = {}
+        editedBook.id = book.id
+        editedBook.title = target.title.value
+        editedBook.info = target.info.value
+        editedBook.moreInfo = target.moreInfo.value
+        bookStore.editBook(editedBook)
+        // Not pretty but MobX won't update
+        location.reload()
     }
 
-    render(){
-        var title = this.props.book.title
-        var info = this.props.book.info
-        var moreInfo = this.props.book.moreInfo
+        var title = book.title
+        var info = book.info
+        var moreInfo = book.moreInfo
     return(
     <div className="col-md-6">
             <h3>Edit Book? </h3>
-        <form onSubmit= {this.handleSubmit}>
+        <form id="la" onSubmit= {handleSubmit}>
             <div className="form-group">
                 <label htmlFor="title">Title</label>
                 <input 
@@ -46,12 +47,13 @@ class EditForm extends Component {
                 type="text" defaultValue={moreInfo}
                 className="form-control" id="moreInfo"/>
             </div>
-                <button className="btn">Save Changes</button>
+                <button type="submit"className="btn">
+                    Save Changes
+                </button>
         </form>
     </div>
     )
- }
-}
+})
 
 
 
