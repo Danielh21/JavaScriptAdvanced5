@@ -4,6 +4,7 @@ var port = 3050
 var facade = require("./facade")
 var userFacade = require('./userFacade')
 var bodyParser = require('body-parser');
+var helmet = require('helmet')
 
 
 var passport = require("passport")
@@ -32,6 +33,7 @@ var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
         next(null,false)
     }
 });
+app.use(helmet());
 
 passport.use(strategy);
 app.use(passport.initialize());
