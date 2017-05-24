@@ -15,6 +15,10 @@ class Details extends Component {
     this.props.bookStore.deleteBook(this.props.id)
   }
 
+  reRender = () =>{
+    this.forceUpdate()
+  }
+
 
 
   render() {
@@ -54,7 +58,7 @@ class Details extends Component {
           </button>
           </div>
         </div>
-        <EditForm bookStore={this.props.bookStore} book={book} />
+        <EditForm reRender={this.reRender} bookStore={this.props.bookStore} book={book} />
       </div>
     );
   }

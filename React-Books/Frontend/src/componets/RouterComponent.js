@@ -4,6 +4,7 @@ import Home from './Home'
 import Blog from './Blog'
 import Product from './Product'
 import Details from './Details'
+import LoginStatus from './LoginStatus'
 import {observer} from 'mobx-react'
 import {
   BrowserRouter as Router,
@@ -22,6 +23,10 @@ class RouterComponent extends Component{
         super(props)
     }
 
+    reRender = () =>{
+        this.forceUpdate() 
+    }
+
     render(){
          var bookStore = this.props.bookStore
         return(
@@ -32,9 +37,10 @@ class RouterComponent extends Component{
                     <li> <Link to="/" selected="activeclass"> Home </Link></li>
                     <li> <Link to="/products"> Product </Link> </li>
                     <li> <Link to="/blog"> Blog </Link> </li>
+                    <li style={{float:"right"}}> <LoginStatus /> </li>
                 </ul>
 
-                    <Route path="/" exact component={Home}></Route>
+                    <Route path="/" exact component={()=> (<Home reRender={this.reRender} />)}></Route>
                     <Route path="/blog"  component={Blog}></Route>
                     <Route exact path="/products"  component={() => (<Product bookStore={bookStore}/>)}></Route>
                     <Route path="/products/details/:id" render={(props) =>( <Details bookStore={bookStore} id={props.match.params.id} />)} ></Route>

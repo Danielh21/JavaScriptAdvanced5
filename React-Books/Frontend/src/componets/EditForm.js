@@ -5,7 +5,7 @@ import {observer} from 'mobx-react'
 
 
 
-const EditForm = observer(({bookStore, book}) => {
+const EditForm = observer(({bookStore, book, reRender}) => {
 
    function handleSubmit(evt){
         evt.preventDefault()
@@ -17,7 +17,9 @@ const EditForm = observer(({bookStore, book}) => {
         editedBook.moreInfo = target.moreInfo.value
         bookStore.editBook(editedBook)
         // Not pretty but MobX won't update
-        location.reload()
+        setTimeout(function() {
+            reRender()
+        }, 1500);
     }
 
         var title = book.title

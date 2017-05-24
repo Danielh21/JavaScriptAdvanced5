@@ -1,5 +1,6 @@
 import {observable, action, useStrict, extendObservable} from 'mobx'
 import axios from 'axios'
+import Auth from './Auth'
 var baseFetchUrl = "http://localhost:3050"
 
 useStrict(true)
@@ -38,7 +39,11 @@ class BookStore {
 
   addBook = action((book) =>{
 
-    axios.post(`${baseFetchUrl}/api/books`,{book})
+    var config = {
+      headers: {'Authorization' : "JWT " + Auth.getToken()}
+    }
+
+    axios.post(`${baseFetchUrl}/api/books`,{book}, config)
       .then((response) =>{
         console.log(response)
         this.fetchBooks()
@@ -50,9 +55,12 @@ class BookStore {
   })
 
   editBook = (book) => {
+     var config = {
+      headers: {'Authorization' : "JWT " + Auth.getToken()}
+    }
 
     if(book.id == null) throw Error("no Id!")
-    axios.put(`${baseFetchUrl}/api/books`,{book})
+    axios.put(`${baseFetchUrl}/api/books`,{book}, config)
     .then((response) =>{
       console.log(response)
       this.fetchBooks()
@@ -63,7 +71,11 @@ class BookStore {
   }
 
   deleteBook = action((bookId) =>{
-    axios.delete(`${baseFetchUrl}/api/books/${bookId}`)
+     var config = {
+      headers: {'Authorization' : "JWT " + Auth.getToken()}
+    }
+    
+    axios.delete(`${baseFetchUrl}/api/books/${bookId}`, config)
       .then((response) =>{
         console.log(response)
         this.fetchBooks()
