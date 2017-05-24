@@ -11,3 +11,4 @@ Excercise can be found here: https://docs.google.com/document/d/1ZY-pZDQfwEoQlVk
 since its suppose to be a secret for the outside world.
 * To test the secruity on the site, try doing delete, add and edit features for the book, without been logged in, and then try again
 this time logged in!
+* The 3 lib dependecy has been check using [nsp](https://nodesecurity.io/) and a screen shot can be found on the site
